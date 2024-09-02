@@ -36,46 +36,46 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        // Instancia e usa objeto que captura código-fonte de páginas Web
+        // instancia e usa objeto que captura código-fonte de páginas Web
         CapturaRecursosWeb crw = new CapturaRecursosWeb();
         
-        // Adicione as URLs dos arquivos locais usando o caminho absoluto
-        crw.getListaRecursos().add("file:///Users/arthurfelipecarminati/Downloads/BuscaPadraoWeb/pages/page1.html");
-        crw.getListaRecursos().add("file:///Users/arthurfelipecarminati/Downloads/BuscaPadraoWeb/pages/page2.html");
-        crw.getListaRecursos().add("file:///Users/arthurfelipecarminati/Downloads/BuscaPadraoWeb/pages/page3.html");
+        // adicione as URLs dos arquivos locais usando o caminho absoluto
+        crw.getListaRecursos().add("file:./pages/page1.html");
+        crw.getListaRecursos().add("file:./pages/page2.html");
+        crw.getListaRecursos().add("file:./pages/page3.html");
     
-        // Captura o conteúdo das páginas
+        // captura o conteúdo das páginas
         ArrayList<String> listaCodigos = crw.carregarRecursos();
     
-        // Verifica se o conteúdo foi carregado
+        // verifica se o conteúdo foi carregado
         if (listaCodigos.isEmpty()) {
             System.err.println("Nenhum conteúdo foi carregado das URLs.");
-            return; // Sai do programa se não houver conteúdo
+            return; 
         }
     
-        // Processa cada página capturada
+        // processa cada página capturada
         for (String codigoHTML : listaCodigos) {
-            System.out.println("Conteúdo capturado da página:");
-            // System.out.println(codigoHTML); // Exibe o HTML capturado
+            System.out.println("");
+            System.out.println("Conteúdo capturado da página " + listaCodigos.indexOf(codigoHTML) + ":");
     
-            // Agora, vamos encontrar as placas no conteúdo capturado
+            // encontra as placas no conteudo da página
             char[] alfabeto = new char[36];
-            for (int i = 0; i < 26; i++) {  // Letras A-Z
+            for (int i = 0; i < 26; i++) {  // A-Z
                 alfabeto[i] = (char) ('A' + i);
             }
-            for (int i = 0; i < 10; i++) {  // Números 0-9
+            for (int i = 0; i < 10; i++) {  // 0-9
                 alfabeto[26 + i] = (char) ('0' + i);
             }
     
-            // Estados do autômato
+            // estados do autômato
             String[] estados = {"q0", "q1", "q2", "q3", "q4", "q5", "q6", "q7"};
             String estado_inicial = "q0";
             String[] estados_finais = {"q7"};
     
-            // Tabela de transição para reconhecer placas Mercosul
+            // tabela de transição para reconhecer placas Mercosul
             int[][] matriz = new int[8][36];
     
-            // Definir transições para cada estado de acordo com o formato da placa
+            // definir transições para cada estado de acordo com o formato da placa
             for (int i = 0; i < 26; i++) {
                 matriz[0][i] = 1;  // q0 -> q1 (letras)
                 matriz[1][i] = 2;  // q1 -> q2 (letras)
@@ -83,7 +83,7 @@ public class Main {
                 matriz[4][i] = 5;  // q4 -> q5 (letras)
             }
     
-            // Transições de números
+            // transições de números
             for (int i = 26; i < 36; i++) {
                 matriz[3][i] = 4;  // q3 -> q4 (números)
                 matriz[5][i] = 6;  // q5 -> q6 (números)
@@ -96,7 +96,7 @@ public class Main {
     
             String placa = "";
     
-            // Varre o código-fonte de cada página
+            // le o código fonte de cada página
             for (int i = 0; i < codigoHTML.length(); i++) {
     
                 estado_anterior = estado;
@@ -115,9 +115,9 @@ public class Main {
                 }
             }
     
-            // Exibe todas as placas reconhecidas
+            // exibe todas as placas encontradas
             for (String p : placas_reconhecidas) {
-                System.out.println("Placa reconhecida: " + p);
+                System.out.println("Placa: " + p);
             }
         }
     }
